@@ -20,6 +20,22 @@ def buscar_contatos():
     response.raise_for_status()
     return response.json()
 
+def enviar_mensagem(nome, telefone):
+    url = f"https://api.z-api.io/instances/{ZAPI_INSTANCE_ID}/token/{ZAPI_TOKEN}/send-text"
+    mensagem = f"Olá, {nome} tudo bem com você?"
+
+    payload = {
+        "phone": telefone,
+        "message": mensagem
+    }
+    headers= {
+        "Content-Type": "application/json"
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    response.raise_for_status()
+    return response.json()
+
 
 if __name__ == "__main__":
     contatos = buscar_contatos()
