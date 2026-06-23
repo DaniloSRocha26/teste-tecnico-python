@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import logging
 
 load_dotenv()
+#Responsável por configurar o formato dos logs
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
@@ -13,7 +14,7 @@ ZAPI_TOKEN = os.getenv("ZAPI_TOKEN")
 ZAPI_CLIENT_TOKEN = os.getenv("ZAPI_CLIENT_TOKEN")
 
 
-# função que busca os contatos no Supabase
+# Função que busca os contatos no Supabase
 def buscar_contatos():
     url = f"{SUPABASE_URL}/rest/v1/contatos?select=nome,telefone&limit=3"
 
@@ -25,7 +26,7 @@ def buscar_contatos():
     response.raise_for_status()
     return response.json()
 
-# função envia a mensagem para um contato via Z-API
+# Função envia a mensagem para um contato via Z-API
 def enviar_mensagem(nome, telefone):
     url = f"https://api.z-api.io/instances/{ZAPI_INSTANCE_ID}/token/{ZAPI_TOKEN}/send-text"
     mensagem = f"Olá, {nome} tudo bem com você?"
@@ -36,14 +37,14 @@ def enviar_mensagem(nome, telefone):
     }
     headers = {
         "Content-Type": "application/json",
-        "Client-Token": ZAPI_CLIENT_TOKEN
+        "Client-Token": ZAPI_CLIENT_TOKEN # Foi exigido pelo Z-API, sem ele dá o erro 400
     }
 
     response = requests.post(url, json=payload, headers=headers)
     response.raise_for_status()
     return response.json()
 
-# função que busca os contatos e envia a mensagem para cada um
+# Função que busca os contatos e envia a mensagem para cada um
 def main():
     try:
         contatos = buscar_contatos()
