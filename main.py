@@ -9,6 +9,7 @@ SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 ZAPI_INSTANCE_ID = os.getenv("ZAPI_INSTANCE_ID")
 ZAPI_TOKEN = os.getenv("ZAPI_TOKEN")
 
+
 def buscar_contatos():
     url = f"{SUPABASE_URL}/rest/v1/contatos?select=nome,telefone&limit=3"
 
@@ -28,7 +29,7 @@ def enviar_mensagem(nome, telefone):
         "phone": telefone,
         "message": mensagem
     }
-    headers= {
+    headers = {
         "Content-Type": "application/json"
     }
 
@@ -36,7 +37,12 @@ def enviar_mensagem(nome, telefone):
     response.raise_for_status()
     return response.json()
 
+def main():
+    contatos = buscar_contatos()
+    for contato in contatos:
+        resultado = enviar_mensagem(contato["nome"], contato["telefone"])
+        print(resultado)
+
 
 if __name__ == "__main__":
-    contatos = buscar_contatos()
-    print(contatos)
+    main()
