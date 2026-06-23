@@ -11,3 +11,16 @@ ZAPI_TOKEN = os.getenv("ZAPI_TOKEN")
 
 def buscar_contatos():
     url = f"{SUPABASE_URL}/rest/v1/contatos?select=nome,telefone&limit=3"
+
+    headers = {
+        "apikey": SUPABASE_KEY,
+        "Authorization": f"Bearer {SUPABASE_KEY}"
+    }
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    return response.json()
+
+
+if __name__ == "__main__":
+    contatos = buscar_contatos()
+    print(contatos)
